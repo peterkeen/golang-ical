@@ -351,7 +351,7 @@ func GeneralParseComponent(cs *CalendarStream, startLine *BaseProperty) (Compone
 	var co Component
 	switch startLine.Value {
 	case "VCALENDAR":
-		return nil, errors.New("Malformed calendar")
+		return nil, errors.New("Malformed calendar: no VCALENDAR inside a component")
 	case "VEVENT":
 		co = ParseVEvent(cs, startLine)
 	case "VTODO":

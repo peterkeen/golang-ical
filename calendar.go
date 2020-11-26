@@ -394,7 +394,7 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 		}
 		line := ParseProperty(*l)
 		if line == nil {
-			return nil, errors.New("Error parsing line")
+			return nil, errors.New(fmt.Sprintf("Error parsing line %d", i))
 		}
 		switch state {
 		case "begin":
@@ -404,10 +404,10 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 				case "VCALENDAR":
 					state = "properties"
 				default:
-					return nil, errors.New("Malformed calendar")
+					return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown value %s on line %d", line.Value, i))
 				}
 			default:
-				return nil, errors.New("Malformed calendar")
+				return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown token %s on line %d", line.IANAToken, i))
 			}
 		case "properties":
 			switch line.IANAToken {
@@ -416,7 +416,7 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 				case "VCALENDAR":
 					state = "end"
 				default:
-					return nil, errors.New("Malformed calendar")
+					return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown value %s on line %d", line.Value, i))
 				}
 			case "BEGIN":
 				state = "components"
@@ -434,7 +434,7 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 				case "VCALENDAR":
 					state = "end"
 				default:
-					return nil, errors.New("Malformed calendar")
+					return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown value %s on line %d", line.IANAToken, i))
 				}
 			case "BEGIN":
 				co, err := GeneralParseComponent(cs, line)
@@ -445,10 +445,10 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 					c.Components = append(c.Components, co)
 				}
 			default:
-				return nil, errors.New("Malformed calendar")
+				return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown token %s on line %d", line.IANAToken, i))
 			}
 		case "end":
-			return nil, errors.New("Malformed calendar")
+			return nil, errors.New(fmt.Sprintf("Malformed calendar: incorrect end state on line %d", i))
 		default:
 			return nil, errors.New("Bad state")
 		}

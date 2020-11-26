@@ -1,3 +1,3 @@
-module github.com/arran4/golang-ical
+module github.com/peterkeen/golang-ical
 
 go 1.12
