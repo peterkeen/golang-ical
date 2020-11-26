@@ -416,7 +416,7 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 				case "VCALENDAR":
 					state = "end"
 				default:
-					return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown value %s for END on line %d", line.Value, i))
+					return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown value %s for END (properties) on line %d", line.Value, i))
 				}
 			case "BEGIN":
 				state = "components"
@@ -434,7 +434,7 @@ func ParseCalendar(r io.Reader) (*Calendar, error) {
 				case "VCALENDAR":
 					state = "end"
 				default:
-					return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown value %s for END on line %d", line.Value, i))
+					return nil, errors.New(fmt.Sprintf("Malformed calendar: unknown value %s for END (components) on line %d", line.Value, i))
 				}
 			case "BEGIN":
 				co, err := GeneralParseComponent(cs, line)
